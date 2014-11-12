@@ -1,9 +1,9 @@
-ITUNES
-GOOGLEPLAY
-SPOTIFY
-AMAZON
-NAPSTER
-LASTFM
-======================
++ ITUNES
++ GOOGLEPLAY
++ SPOTIFY
++ AMAZON
++ NAPSTER
++ LASTFM
 
+======================
 ====> YOUTUBE
