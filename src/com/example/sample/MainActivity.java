@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -157,6 +157,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             		return "Top Charts";
             	case 1: 
             		return "Search";
+            	case 2:
+            		return "Events";
             	default: 
             		return "My Playlist";
             }
