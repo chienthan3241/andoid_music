@@ -33,83 +33,174 @@
             android:layout_height="wrap_content"
             android:text="@string/demo_external_activity" />
         -->
-		<ImageButton
-        android:id="@+id/imageitunes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/itunes_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/itunesLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+				<ImageButton
+		        android:id="@+id/imageitunes"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/itunes_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+
+				<TextView
+				    android:id="@+id/textView1"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Itunes" />
 		
-		<ImageButton
-        android:id="@+id/imagegoogleplay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/googleplay_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+		</LinearLayout>
 		
-		<ImageButton
-        android:id="@+id/imagespotify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/spotify_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/googleLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 		
-		<ImageButton
-        android:id="@+id/imageamazon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/amazon_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+				<ImageButton
+		        android:id="@+id/imagegoogleplay"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/googleplay_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+				
+				<TextView
+				    android:id="@+id/textView2"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Google Play" />
 		
-		<ImageButton
-        android:id="@+id/imagenapster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/napster_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+		</LinearLayout>
 		
-		<ImageButton
-        android:id="@+id/imagelastfm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/lastfm_store"
-        android:padding="5dp"
-        android:scaleType="fitCenter" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/spotifyLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+				
+				<ImageButton
+		        android:id="@+id/imagespotify"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/spotify_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+				
+				<TextView
+				    android:id="@+id/textView3"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Spotify" />
+		
+		</LinearLayout>
+		
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/amazonLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+				
+				<ImageButton
+		        android:id="@+id/imageamazon"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/amazon_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+				
+				<TextView
+				    android:id="@+id/textView4"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Amazon Music" />
+		
+		</LinearLayout>
+		
+         <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/napsterLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+				
+				<ImageButton
+		        android:id="@+id/imagenapster"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/napster_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+				
+				<TextView
+				    android:id="@+id/textView5"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Napster" />
+		
+		</LinearLayout>
+		
+         <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/lastfmLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+		
+				<ImageButton
+		        android:id="@+id/imagelastfm"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="0dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:background="@android:color/transparent"
+		        android:src="@drawable/lastfm_store"
+		        android:padding="2dp"
+		        android:scaleType="fitCenter" />
+				
+				<TextView
+				    android:id="@+id/textView6"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Lastfm" />
+		
+		</LinearLayout>
 		
     </LinearLayout>
 

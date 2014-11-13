@@ -14,9 +14,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +36,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * The {@link ViewPager} that will display the three primary sections of the app, one at a
      * time.
      */
-    ViewPager mViewPager;
+    ViewPager mViewPager;   
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +137,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     // The first section of the app is the most interesting -- it offers
                     // a launchpad into the other demonstrations in this example application.
                     return new LaunchpadSectionFragment();
-
+                case 1:
+                	// section of search
+                	return new SearchSectionFragment();
                 default:
                     // The other sections of the app are dummy placeholders.
                     Fragment fragment = new DummySectionFragment();
@@ -163,6 +168,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             		return "My Playlist";
             }
         }
+    }
+    
+    /**
+     * Fragment Search
+     */
+    public static class SearchSectionFragment extends Fragment {
+    	@Override
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    		View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);
+    		return rootView;
+    	}
     }
 
     /**
@@ -202,13 +218,54 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             startActivity(externalActivityIntent);
                         }
                     });
-                    */
+                    */           
          // itunes-store clicked.
             rootView.findViewById(R.id.imageitunes)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	
+                        	Log.d("MyApp","Itunes clicked");
+                        }
+                    });
+            
+         // google-store clicked.
+            rootView.findViewById(R.id.imagegoogleplay)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	Log.d("MyApp","Google clicked");
+                        }
+                    });
+         // Spotify-store clicked.
+            rootView.findViewById(R.id.imagespotify)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	Log.d("MyApp","Spotify clicked");
+                        }
+                    });
+         // Amazon-store clicked.
+            rootView.findViewById(R.id.imageamazon)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	Log.d("MyApp","Amazon clicked");
+                        }
+                    });
+         // Napster-store clicked.
+            rootView.findViewById(R.id.imagenapster)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	Log.d("MyApp","Napster clicked");
+                        }
+                    });
+         // Lastfm-store clicked.
+            rootView.findViewById(R.id.imagelastfm)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        	Log.d("MyApp","Lastfm clicked");
                         }
                     });
 

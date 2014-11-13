@@ -1,0 +1,103 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+	<LinearLayout 
+	    android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="20dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:orientation="horizontal"
+	        android:padding="10dp"
+	        android:weightSum="100" >
+			<LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"	        
+	        android:orientation="horizontal"
+	        android:layout_weight="60" >
+		        <TextView
+		            android:id="@+id/titleLabel"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textSize="16sp"
+		            android:text="Title: " />
+		
+		        <EditText
+		            android:id="@+id/titleinput"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:inputType="text"
+		            android:ems="10" >
+		            <requestFocus />
+		        </EditText>
+	   		</LinearLayout >
+	   
+			<RelativeLayout		    
+			    android:layout_width="fill_parent" 
+			    android:layout_height="fill_parent" >
+			        <ToggleButton
+			            android:id="@+id/toggleButton1"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true" 
+			            android:textOn="Track"
+			            android:textOff="Album"
+			            android:checked="true"
+			            android:textSize="20sp"
+			             />
+			</RelativeLayout>  
+		    
+	    </LinearLayout >
+	    
+	     <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="20dp"
+	        android:orientation="horizontal"
+	        android:paddingLeft="10dp"
+	        android:layout_gravity="left" >
+				<TextView
+		            android:id="@+id/artistLabel"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textSize="16sp"
+		            android:text="Artist " />
+		
+		        <EditText
+		            android:id="@+id/artistinput"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:inputType="text"
+		            android:ems="10" >
+		            <requestFocus />
+		        </EditText>
+		</LinearLayout >
+		
+	     <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="20dp"
+	        android:orientation="horizontal"
+	        android:padding="10dp"
+	        android:layout_gravity="left" >
+				<Button
+		            android:id="@+id/searchbtn"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textSize="16sp"
+		            android:text="Search " />
+		
+		      
+		</LinearLayout >
+	    
+		
+	</LinearLayout >
+
+	
+</FrameLayout>

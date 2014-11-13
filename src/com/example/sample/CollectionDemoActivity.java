@@ -1,5 +1,5 @@
 package com.example.sample;
-
+/*
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,12 +24,12 @@ public class CollectionDemoActivity extends FragmentActivity {
      * derivative, which will destroy and re-create fragments as needed, saving and restoring their
      * state in the process. This is important to conserve memory and is a best practice when
      * allowing navigation between objects in a potentially large collection.
-     */
+     
     DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
-     */
+     
     ViewPager mViewPager;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class CollectionDemoActivity extends FragmentActivity {
     /**
      * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment
      * representing an object in the collection.
-     */
+     
     public static class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
         public DemoCollectionPagerAdapter(FragmentManager fm) {
@@ -114,7 +114,7 @@ public class CollectionDemoActivity extends FragmentActivity {
 
     /**
      * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
+     
     public static class DemoObjectFragment extends Fragment {
 
         public static final String ARG_OBJECT = "object";
@@ -130,3 +130,4 @@ public class CollectionDemoActivity extends FragmentActivity {
         }
     }
 }
+*/
