@@ -14,35 +14,31 @@
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginRight="20dp"
 	        android:orientation="horizontal"
-	        android:padding="10dp"
-	        android:weightSum="100" >
-			<LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"	        
-	        android:orientation="horizontal"
-	        android:layout_weight="60" >
-		        <TextView
-		            android:id="@+id/titleLabel"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textSize="16sp"
-		            android:text="Title: " />
-		
-		        <EditText
-		            android:id="@+id/titleinput"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:inputType="text"
-		            android:ems="10" >
-		            <requestFocus />
-		        </EditText>
-	   		</LinearLayout >
+	        android:padding="10dp" >
+
+	        <TextView
+	            android:id="@+id/titleLabel"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="16sp"
+	            android:text="Title: " />
+	
+	        <EditText
+	            android:id="@+id/titleinput"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            
+	            android:inputType="text"
+	            android:ems="10" >
+	            <requestFocus />
+	        </EditText>
+	   
 	   
 			<RelativeLayout		    
 			    android:layout_width="fill_parent" 
 			    android:layout_height="fill_parent" >
 			        <ToggleButton
-			            android:id="@+id/toggleButton1"
+			            android:id="@+id/searchtype"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_alignParentRight="true" 
@@ -55,29 +51,31 @@
 		    
 	    </LinearLayout >
 	    
-	     <LinearLayout 
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="20dp"
-	        android:orientation="horizontal"
-	        android:paddingLeft="10dp"
-	        android:layout_gravity="left" >
-				<TextView
-		            android:id="@+id/artistLabel"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textSize="16sp"
-		            android:text="Artist " />
-		
-		        <EditText
-		            android:id="@+id/artistinput"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:inputType="text"
-		            android:ems="10" >
-		            <requestFocus />
-		        </EditText>
-		</LinearLayout >
+	     <LinearLayout
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_gravity="left"
+	         android:layout_marginLeft="20dp"
+	         android:orientation="horizontal"
+	         android:paddingLeft="10dp" >
+
+	         <TextView
+	             android:id="@+id/artistLabel"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:text="Artist "
+	             android:textSize="16sp" />
+
+	         <EditText
+	             android:id="@+id/artistinput"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:ems="10"
+	             android:inputType="text" >
+
+	             <requestFocus />
+	         </EditText>
+	     </LinearLayout>
 		
 	     <LinearLayout 
 	        android:layout_width="fill_parent"
@@ -96,7 +94,31 @@
 		      
 		</LinearLayout >
 	    
-		
+	     <LinearLayout
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_gravity="left"
+	         android:layout_margin="20dp"
+	         android:orientation="horizontal"
+	         android:padding="10dp" >
+
+	         <EditText
+	             android:id="@+id/log"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_weight="0.23"
+	             android:ems="10"
+	             android:gravity="top|left"
+	             android:inputType="textMultiLine"
+	             android:lines="8"
+	             android:maxLines="10"
+	             android:minLines="6"
+	             android:scrollbars="vertical" >
+
+	             <requestFocus />
+	         </EditText>
+	     </LinearLayout>
+
 	</LinearLayout >
 
 	

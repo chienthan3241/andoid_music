@@ -1,11 +1,19 @@
 package com.example.sample;
 
+import org.json.JSONObject;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,12 +26,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ToggleButton;
+
+
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
-
+	private static RequestQueue queue = null;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
      * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
@@ -58,6 +68,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         if(!isOnline()){
         	arlertDialog.show();
         }
+        
+        //innit Volley Request Queue
+        queue = Volley.newRequestQueue(this);
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
@@ -176,7 +189,40 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static class SearchSectionFragment extends Fragment {
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-    		View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);
+    		final View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);
+    		
+    		final EditText titletxt = (EditText)rootView.findViewById(R.id.titleinput);
+    		final ToggleButton typebtn = (ToggleButton)rootView.findViewById(R.id.searchtype);
+    		//button search clicked
+    		rootView.findViewById(R.id.searchbtn).setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View view) {
+					// TODO Auto-generated method stub					
+					String rq = "https://api.spotify.com/v1/search?q=track:happy&type=track&limit=1";
+					JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
+						    new Response.Listener<JSONObject>() 
+						    {
+						        @Override
+						        public void onResponse(JSONObject response) {   
+						            // display response     
+						        	EditText editText = (EditText)rootView.findViewById(R.id.log);
+						        	editText.setText(response.toString());
+						        }
+						    }, 
+						    new Response.ErrorListener() 
+						    {
+						         @Override
+						         public void onErrorResponse(VolleyError error) {            
+						            Log.v("Error.Response", "jojfo");
+						       }								
+						    }
+						);
+					queue.add(getRequest);
+					
+				}
+			});
+    		
     		return rootView;
     	}
     }
@@ -224,7 +270,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Itunes clicked");
+                        	Log.v("MyApp","Itunes clicked");
                         }
                     });
             
@@ -233,7 +279,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Google clicked");
+                        	Log.v("MyApp","Google clicked");
                         }
                     });
          // Spotify-store clicked.
@@ -241,7 +287,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Spotify clicked");
+                        	Log.v("MyApp","Spotify clicked");
                         }
                     });
          // Amazon-store clicked.
@@ -249,7 +295,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Amazon clicked");
+                        	Log.v("MyApp","Amazon clicked");
                         }
                     });
          // Napster-store clicked.
@@ -257,7 +303,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Napster clicked");
+                        	Log.v("MyApp","Napster clicked");
                         }
                     });
          // Lastfm-store clicked.
@@ -265,7 +311,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                        	Log.d("MyApp","Lastfm clicked");
+                        	Log.v("MyApp","Lastfm clicked");
                         }
                     });
 
