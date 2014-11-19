@@ -1,5 +1,7 @@
 package com.example.sample;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -36,7 +40,16 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {	
 	
+	/**
+	 * my variables
+	 */
 	private static RequestQueue queue = null;
+	static JSONObject searchjson = null;
+	static String search_format = "";
+	static ArrayList<String> SearchListItems = new ArrayList<String>();
+	static ArrayAdapter<String> SearchListAdapter;
+	
+	
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
      * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
@@ -63,6 +76,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         
         //init Volley Request Queue
         queue = Volley.newRequestQueue(this);
+        
+        //init Search_list
+        SearchListAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, SearchListItems);
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
@@ -193,7 +209,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     		final EditText titletxt = (EditText)rootView.findViewById(R.id.titleinput);
     		final ToggleButton typebtn = (ToggleButton)rootView.findViewById(R.id.searchtype);
     		final EditText artisttxt = (EditText)rootView.findViewById(R.id.artistinput);
-    		
+    		searchjson = null;
+    		search_format = "";
     		//button search clicked
     		rootView.findViewById(R.id.searchbtn).setOnClickListener(new View.OnClickListener() {
     			
@@ -203,27 +220,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					String artisttext = artisttxt.getText().toString();
 					if(titletext.equals("") && artisttext.equals("")){						
 							titletxt.setBackgroundColor(-65536);						
-							artisttxt.setBackgroundColor(-16776961);						
-							
-					} else{
-
-						
-						String rq = "https://api.spotify.com/v1/search?q=track:happy&type=track&limit=3";
+							artisttxt.setBackgroundColor(-16776961);
+					} else{						
+						String rq = "https://api.spotify.com/v1/search?q=track:happy&type=track";
 						JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
 							    new Response.Listener<JSONObject>() 
 							    {
 							        @Override
 							        public void onResponse(JSONObject response) {   
-							            // display response     						        	
-							        	try {
-											JSONArray items = response.getJSONObject("tracks").getJSONArray("items");
-											for(int i=0; i< items.length();i++){											
-												//											
-											}
-										} catch (JSONException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}		
+							            searchjson = response;
+							            if(typebtn.isChecked()){
+							            	search_format = "TRACK";
+							            }else{
+							            	search_format = "ALBUM";
+							            }
 							        	
 							        	if(mListener != null){
 							        		mListener.onSwitchToNextFragment();
@@ -256,7 +266,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     /**
      * Fragment Search content
      */
-    public static class SearchContentSectionFragment extends BaseFragment {
+    public static  class SearchContentSectionFragment extends BaseFragment {
     	
     	private String mTitle;
     	
@@ -266,14 +276,32 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-    		final View rootView = inflater.inflate(R.layout.fragment_section_search_content, container, false);    		
+    		View rootView = inflater.inflate(R.layout.fragment_section_search_content, container, false);    		
+    		ListView list = (ListView)rootView.findViewById(R.id.listsearch);
+    		JSONArray items = null;
+    		JSONObject item = null;
+    		if(search_format == "TRACK"){
+    			try {
+					items = searchjson.getJSONObject("tracks").getJSONArray("items");
+					for(int i = 0; i<items.length();i++){
+						item = items.getJSONObject(i);
+						SearchListItems.add(item.getString("name"));
+					}
+					SearchListAdapter.notifyDataSetChanged();					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		
+    		list.setAdapter(SearchListAdapter);
     		
     		return rootView;
     	}
     	
-    	public static SearchContentSectionFragment newInstance(String title){
+    	public static  SearchContentSectionFragment newInstance(String title){
     		return new SearchContentSectionFragment(title);
     	}
-    }
+    }   
   
 }
