@@ -1,6 +1,7 @@
 package com.example.sample;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +24,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,21 +32,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {	
 	
 	/**
 	 * my variables
 	 */
 	private static RequestQueue queue = null;
-	static JSONObject searchjson = null;
-	static String search_format = "";
-	static ArrayList<String> SearchListItems = new ArrayList<String>();
-	static ArrayAdapter<String> SearchListAdapter;
+	private static JSONObject searchjson = null;
+	private static String search_format = "";
+	private static List<single_track> SearchListItems = new ArrayList<single_track>();
+	private static ListView SearchlistView;
+	private static searchTrackList SearchListAdapter;
 	
 	
     /**
@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         queue = Volley.newRequestQueue(this);
         
         //init Search_list
-        SearchListAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, SearchListItems);
+        SearchListAdapter=new searchTrackList(this, SearchListItems); 
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
@@ -204,8 +204,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
     		
-    		final View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);
-    		final View contentView = inflater.inflate(R.layout.fragment_section_search_content, container, false);
+    		final View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);    		
     		final EditText titletxt = (EditText)rootView.findViewById(R.id.titleinput);
     		final ToggleButton typebtn = (ToggleButton)rootView.findViewById(R.id.searchtype);
     		final EditText artisttxt = (EditText)rootView.findViewById(R.id.artistinput);
@@ -216,39 +215,73 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     			
 				@Override
 				public void onClick(View view) {
-					String titletext = titletxt.getText().toString();
-					String artisttext = artisttxt.getText().toString();
+					String titletext = titletxt.getText().toString().trim();
+					String artisttext = artisttxt.getText().toString().trim();
 					if(titletext.equals("") && artisttext.equals("")){						
-							titletxt.setBackgroundColor(-65536);						
-							artisttxt.setBackgroundColor(-16776961);
-					} else{						
-						String rq = "https://api.spotify.com/v1/search?q=track:happy&type=track";
-						JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
-							    new Response.Listener<JSONObject>() 
-							    {
-							        @Override
-							        public void onResponse(JSONObject response) {   
-							            searchjson = response;
-							            if(typebtn.isChecked()){
-							            	search_format = "TRACK";
-							            }else{
-							            	search_format = "ALBUM";
-							            }
-							        	
-							        	if(mListener != null){
-							        		mListener.onSwitchToNextFragment();
-							        	}						        
-							        	
-							        }
-							    }, 
-							    new Response.ErrorListener() 
-							    {
-							         @Override
-							         public void onErrorResponse(VolleyError error) {            
-							            Log.v("Error.Response", "error");
-							       }								
-							    }
-							);
+						//show alert
+						final AlertDialog arlertDialog = new AlertDialog.Builder(view.getContext()).create();
+						arlertDialog.setTitle("warning!!");
+				        arlertDialog.setMessage("wtf! what do you want to search??");
+				        arlertDialog.setButton("OK", new DialogInterface.OnClickListener() {			
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								arlertDialog.cancel();
+								titletxt.requestFocus();
+							}
+						});
+				        arlertDialog.show();
+					} else{		
+						//buil request
+						String rq = "";						
+							
+						if(typebtn.isChecked()){
+							rq = "https://api.spotify.com/v1/search?q=";
+							if(!titletext.equals("")){
+								rq=rq+"track:"+titletext.replace(" ", "%20");
+								if(!artisttext.equals(""))
+									rq=rq+"+artist:"+artisttext.replace(" ", "%20");
+							}else{
+								rq=rq+"artist:"+artisttext.replace(" ", "%20");
+							}
+								rq=rq+"&type=track";								
+						}else{
+							rq = "https://api.spotify.com/v1/search?q=";
+							if(!titletext.equals("")){
+								rq=rq+"album:"+titletext.replace(" ", "%20");
+								if(!artisttext.equals(""))
+									rq=rq+"+artist:"+artisttext.replace(" ", "%20");
+							}else{
+								rq=rq+"artist:"+artisttext.replace(" ", "%20");
+							}
+								rq=rq+"&type=album";								
+						}
+							JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
+								    new Response.Listener<JSONObject>() 
+								    {
+								        @Override
+								        public void onResponse(JSONObject response) {   
+								            searchjson = response;
+								            if(typebtn.isChecked()){
+								            	search_format = "TRACK";
+								            }else{
+								            	search_format = "ALBUM";
+								            }
+								        	
+								        	if(mListener != null){
+								        		mListener.onSwitchToNextFragment();
+								        	}						        
+								        	
+								        }
+								    }, 
+								    new Response.ErrorListener() 
+								    {
+								         @Override
+								         public void onErrorResponse(VolleyError error) {            
+								            Log.v("Error.Response", "error");
+								       }								
+								    }
+								);
+							
 						queue.add(getRequest);					
 					}
 				}
@@ -276,26 +309,31 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-    		View rootView = inflater.inflate(R.layout.fragment_section_search_content, container, false);    		
-    		ListView list = (ListView)rootView.findViewById(R.id.listsearch);
+    		View rootView = inflater.inflate(R.layout.fragment_section_search_content, container, false);
     		JSONArray items = null;
     		JSONObject item = null;
+    		SearchListItems.clear();
+    		SearchlistView = (ListView) rootView.findViewById(R.id.listsearch);
     		if(search_format == "TRACK"){
     			try {
 					items = searchjson.getJSONObject("tracks").getJSONArray("items");
 					for(int i = 0; i<items.length();i++){
 						item = items.getJSONObject(i);
-						SearchListItems.add(item.getString("name"));
-					}
+						single_track track_tmp = new single_track();
+						track_tmp.setTitle(item.getString("name"));
+						track_tmp.setArtist(item.getJSONArray("artists").getJSONObject(0).getString("name"));
+						track_tmp.setThumbnailUrl(item.getJSONObject("album").getJSONArray("images").getJSONObject(2).getString("url"));
+						track_tmp.setInfo("info");
+						SearchListItems.add(track_tmp);
+						//SearchListItems.set
+					}					
 					SearchListAdapter.notifyDataSetChanged();					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-    		}
-    		
-    		list.setAdapter(SearchListAdapter);
-    		
+    		}   
+    		SearchlistView.setAdapter(SearchListAdapter);
     		return rootView;
     	}
     	

@@ -33,7 +33,7 @@ public final class R {
         public static final int spotify_store=0x7f020006;
     }
     public static final class id {
-        public static final int action_settings=0x7f080020;
+        public static final int action_settings=0x7f08001f;
         public static final int amazonLayout=0x7f08000c;
         public static final int artistLabel=0x7f080018;
         public static final int artistinput=0x7f080019;
@@ -46,13 +46,12 @@ public final class R {
         public static final int imagespotify=0x7f08000a;
         public static final int itunesLayout=0x7f080003;
         public static final int lastfmLayout=0x7f080012;
-        public static final int listsearch=0x7f08001c;
-        public static final int log=0x7f08001b;
+        public static final int listsearch=0x7f08001b;
         public static final int napsterLayout=0x7f08000f;
         public static final int pager=0x7f080000;
         public static final int pager_title_strip=0x7f080001;
         public static final int searchbtn=0x7f08001a;
-        public static final int searchtype=0x7f080017;
+        public static final int searchtype=0x7f080015;
         public static final int section_label=0x7f080002;
         public static final int spotifyLayout=0x7f080009;
         public static final int textView1=0x7f080005;
@@ -61,11 +60,11 @@ public final class R {
         public static final int textView4=0x7f08000e;
         public static final int textView5=0x7f080011;
         public static final int textView6=0x7f080014;
-        public static final int titleLabel=0x7f080015;
-        public static final int titleinput=0x7f080016;
-        public static final int track_info=0x7f08001f;
-        public static final int track_thumbnail=0x7f08001d;
-        public static final int track_title=0x7f08001e;
+        public static final int titleLabel=0x7f080016;
+        public static final int titleinput=0x7f080017;
+        public static final int track_info=0x7f08001e;
+        public static final int track_thumbnail=0x7f08001c;
+        public static final int track_title=0x7f08001d;
     }
     public static final class layout {
         public static final int activity_collection_demo=0x7f030000;
