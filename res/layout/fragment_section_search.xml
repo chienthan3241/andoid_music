@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:id="@+id/searchlayout" >
     
 	<LinearLayout 
 	    android:orientation="vertical"
@@ -39,23 +40,46 @@
 	        android:gravity="center_horizontal"
 	        android:orientation="horizontal"
 	        android:padding="10dp" >
-
+	        	        
 	        <TextView
 	            android:id="@+id/titleLabel"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="Title: "
 	            android:textSize="16sp" />
-
-	        <EditText
+	       
+	        <com.example.sample.DelayAutoCompleteTextView 
+	            android:id="@+id/albuminput"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="textCapSentences"
+	            android:imeOptions="flagNoExtractUi|actionSearch"
+	            android:visibility="gone"
+	            />
+	        <ProgressBar
+            android:id="@+id/al_loading_indicator"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone"/>
+	        <com.example.sample.DelayAutoCompleteTextView 
 	            android:id="@+id/titleinput"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:ems="10"
-	            android:inputType="text" >
-
-	            <requestFocus />
-	        </EditText>
+	            android:inputType="textCapSentences"
+	            android:imeOptions="flagNoExtractUi|actionSearch"
+	            />
+	        <ProgressBar
+            android:id="@+id/pb_loading_indicator"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone"/>
+	        
 	    </LinearLayout>
 	    
 	     <LinearLayout
@@ -74,7 +98,7 @@
 	             android:text="Artist "
 	             android:textSize="16sp" />
 
-	         <EditText
+	         <!-- <EditText
 	             android:id="@+id/artistinput"
 	             android:layout_width="wrap_content"
 	             android:layout_height="wrap_content"
@@ -82,7 +106,22 @@
 	             android:inputType="text" >
 
 	             <requestFocus />
-	         </EditText>
+	         </EditText> -->
+	         <com.example.sample.DelayAutoCompleteTextView 
+	            android:id="@+id/artistinput"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:inputType="textCapSentences"
+	            android:imeOptions="flagNoExtractUi|actionSearch"
+	            />
+	        <ProgressBar
+            android:id="@+id/art_loading_indicator"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone"/>
 	     </LinearLayout>
 		
 	     <LinearLayout 

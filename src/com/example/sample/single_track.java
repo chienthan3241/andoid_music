@@ -1,17 +1,26 @@
 package com.example.sample;
 
 public class single_track {
-	private String title, artist, thumbnailUrl, info;
+	private String title, artist, thumbnailUrl, info, id;
 	
 	public single_track(){
 		
 	}
-	public single_track(String title, String artist, String thumbnailUrl, String info){
+	public single_track(String title, String artist, String thumbnailUrl, String info, String id){
 		this.title = title;
 		this.artist = artist;
 		this.thumbnailUrl = thumbnailUrl;
-		this.info = info;		
+		this.info = info;
+		this.id = id;
 	}
+	
+	public String getId(){
+		return this.id;
+	}
+	
+	public void setId(String id) {
+        this.id = id;
+    }
 	
 	public String getTitle(){
 		return this.title;

@@ -29,9 +29,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
@@ -205,11 +208,73 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
     		
     		final View rootView = inflater.inflate(R.layout.fragment_section_search, container, false);    		
-    		final EditText titletxt = (EditText)rootView.findViewById(R.id.titleinput);
+    		final DelayAutoCompleteTextView titletxt = (DelayAutoCompleteTextView)rootView.findViewById(R.id.titleinput);
     		final ToggleButton typebtn = (ToggleButton)rootView.findViewById(R.id.searchtype);
-    		final EditText artisttxt = (EditText)rootView.findViewById(R.id.artistinput);
+    		final DelayAutoCompleteTextView albumtxt = (DelayAutoCompleteTextView)rootView.findViewById(R.id.albuminput);
+    		final DelayAutoCompleteTextView artisttxt = (DelayAutoCompleteTextView)rootView.findViewById(R.id.artistinput);
     		searchjson = null;
     		search_format = "";
+    		rootView.findViewById(R.id.titleinput).requestFocus();
+    		titletxt.setThreshold(0);
+    		titletxt.setAdapter(new autocompleteSearchTitle(rootView.getContext()));
+    		titletxt.setLoadingIndicator((android.widget.ProgressBar) rootView.findViewById(R.id.pb_loading_indicator));
+    		titletxt.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					String title = (String) parent.getItemAtPosition(position);
+					titletxt.setText(title);
+				}
+    			
+    		});
+    		albumtxt.setThreshold(0);
+    		albumtxt.setAdapter(new autocompleteSearchAlbum(rootView.getContext()));
+    		albumtxt.setLoadingIndicator((android.widget.ProgressBar) rootView.findViewById(R.id.al_loading_indicator));
+    		albumtxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					String album = (String) parent.getItemAtPosition(position);
+					albumtxt.setText(album);
+				}
+    			
+			});
+    		artisttxt.setThreshold(0);
+    		artisttxt.setAdapter(new autocompleteSearchArtist(rootView.getContext()));
+    		artisttxt.setLoadingIndicator((android.widget.ProgressBar) rootView.findViewById(R.id.art_loading_indicator));
+    		artisttxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					String name = (String) parent.getItemAtPosition(position);
+					artisttxt.setText(name);
+					
+				}
+			});
+    		//tootgle button clicked
+    		typebtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {				
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if(isChecked){
+						titletxt.setVisibility(View.VISIBLE);
+						albumtxt.setVisibility(View.GONE);
+						albumtxt.setText("");
+						titletxt.requestFocus();
+					}else{
+						titletxt.setVisibility(View.GONE);
+						titletxt.setText("");
+						albumtxt.setVisibility(View.VISIBLE);
+						albumtxt.requestFocus();
+					}					
+				}
+			});
+
     		//button search clicked
     		rootView.findViewById(R.id.searchbtn).setOnClickListener(new View.OnClickListener() {
     			
@@ -217,72 +282,113 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				public void onClick(View view) {
 					String titletext = titletxt.getText().toString().trim();
 					String artisttext = artisttxt.getText().toString().trim();
-					if(titletext.equals("") && artisttext.equals("")){						
-						//show alert
-						final AlertDialog arlertDialog = new AlertDialog.Builder(view.getContext()).create();
-						arlertDialog.setTitle("warning!!");
-				        arlertDialog.setMessage("wtf! what do you want to search??");
-				        arlertDialog.setButton("OK", new DialogInterface.OnClickListener() {			
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								arlertDialog.cancel();
-								titletxt.requestFocus();
-							}
-						});
-				        arlertDialog.show();
-					} else{		
-						//buil request
-						String rq = "";						
-							
-						if(typebtn.isChecked()){
-							rq = "https://api.spotify.com/v1/search?q=";
-							if(!titletext.equals("")){
-								rq=rq+"track:"+titletext.replace(" ", "%20");
-								if(!artisttext.equals(""))
-									rq=rq+"+artist:"+artisttext.replace(" ", "%20");
-							}else{
-								rq=rq+"artist:"+artisttext.replace(" ", "%20");
-							}
-								rq=rq+"&type=track";								
-						}else{
-							rq = "https://api.spotify.com/v1/search?q=";
-							if(!titletext.equals("")){
-								rq=rq+"album:"+titletext.replace(" ", "%20");
-								if(!artisttext.equals(""))
-									rq=rq+"+artist:"+artisttext.replace(" ", "%20");
-							}else{
-								rq=rq+"artist:"+artisttext.replace(" ", "%20");
-							}
-								rq=rq+"&type=album";								
+					String albumtext = albumtxt.getText().toString().trim();
+					if(typebtn.isChecked()){
+						//track search
+						if(titletext.equals("") && artisttext.equals("") ){						
+							//show alert
+							final AlertDialog arlertDialog = new AlertDialog.Builder(view.getContext()).create();
+							arlertDialog.setTitle("warning!!");
+					        arlertDialog.setMessage("wtf! what do you want to search??");
+					        arlertDialog.setButton("OK", new DialogInterface.OnClickListener() {			
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									arlertDialog.cancel();
+									titletxt.requestFocus();
+								}
+							});
+					        arlertDialog.show();
+						} else{		
+								//buil request
+								String rq = "";
+								rq = "https://api.spotify.com/v1/search?q=";
+								if(!titletext.equals("")){
+									rq=rq+"track:"+titletext.replace(" ", "%20");
+									if(!artisttext.equals(""))
+										rq=rq+"+artist:"+artisttext.replace(" ", "%20");
+								}else{
+									rq=rq+"artist:"+artisttext.replace(" ", "%20");
+								}
+									rq=rq+"&type=track";								
+									Log.v("meeeeeeeee",rq);
+								JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
+									    new Response.Listener<JSONObject>() 
+									    {
+									        @Override
+									        public void onResponse(JSONObject response) {   
+									            searchjson = response;
+									            search_format = "TRACK";									          
+									        	
+									        	if(mListener != null){
+									        		mListener.onSwitchToNextFragment();
+									        	}						        
+									        	
+									        }
+									    }, 
+									    new Response.ErrorListener() 
+									    {
+									         @Override
+									         public void onErrorResponse(VolleyError error) {            
+									            Log.v("Error.Response", "error");
+									       }								
+									    }
+									);
+								
+							queue.add(getRequest);					
 						}
-							JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
-								    new Response.Listener<JSONObject>() 
-								    {
-								        @Override
-								        public void onResponse(JSONObject response) {   
-								            searchjson = response;
-								            if(typebtn.isChecked()){
-								            	search_format = "TRACK";
-								            }else{
-								            	search_format = "ALBUM";
-								            }
-								        	
-								        	if(mListener != null){
-								        		mListener.onSwitchToNextFragment();
-								        	}						        
-								        	
-								        }
-								    }, 
-								    new Response.ErrorListener() 
-								    {
-								         @Override
-								         public void onErrorResponse(VolleyError error) {            
-								            Log.v("Error.Response", "error");
-								       }								
-								    }
-								);
-							
-						queue.add(getRequest);					
+					}else{
+						//album search
+						if(albumtxt.equals("") && artisttext.equals("") ){						
+							//show alert
+							final AlertDialog arlertDialog = new AlertDialog.Builder(view.getContext()).create();
+							arlertDialog.setTitle("warning!!");
+					        arlertDialog.setMessage("wtf! what do you want to search??");
+					        arlertDialog.setButton("OK", new DialogInterface.OnClickListener() {			
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									arlertDialog.cancel();
+									albumtxt.requestFocus();
+								}
+							});
+					        arlertDialog.show();
+						} else{		
+								//buil request
+								String rq = "";
+								rq = "https://api.spotify.com/v1/search?q=";
+								if(!albumtext.equals("")){
+									rq=rq+"album:"+albumtext.replace(" ", "%20");
+									if(!artisttext.equals(""))
+										rq=rq+"+artist:"+artisttext.replace(" ", "%20");
+								}else{
+									rq=rq+"artist:"+artisttext.replace(" ", "%20");
+								}
+									rq=rq+"&type=album";								
+									Log.v("meeeeeeeee",rq);
+								JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
+									    new Response.Listener<JSONObject>() 
+									    {
+									        @Override
+									        public void onResponse(JSONObject response) {   
+									            searchjson = response;
+									           search_format = "ALBUM";									           
+									        	
+									        	if(mListener != null){
+									        		mListener.onSwitchToNextFragment();
+									        	}						        
+									        	
+									        }
+									    }, 
+									    new Response.ErrorListener() 
+									    {
+									         @Override
+									         public void onErrorResponse(VolleyError error) {            
+									            Log.v("Error.Response", "error");
+									       }								
+									    }
+									);
+								
+							queue.add(getRequest);					
+						}
 					}
 				}
 				
@@ -320,19 +426,41 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					for(int i = 0; i<items.length();i++){
 						item = items.getJSONObject(i);
 						single_track track_tmp = new single_track();
+						track_tmp.setId(item.getString("id"));
 						track_tmp.setTitle(item.getString("name"));
 						track_tmp.setArtist(item.getJSONArray("artists").getJSONObject(0).getString("name"));
 						track_tmp.setThumbnailUrl(item.getJSONObject("album").getJSONArray("images").getJSONObject(2).getString("url"));
-						track_tmp.setInfo("info");
-						SearchListItems.add(track_tmp);
-						//SearchListItems.set
+						track_tmp.setInfo("Album: "+item.getJSONObject("album").getString("name")+
+										"\t Disc_nr: "+item.getString("disc_number")+
+										"\t track_nr: "+item.getString("track_number") + 
+										"\t duration: "+ String.format("%.2f", (float)(Integer.parseInt(item.getString("duration_ms"))/60000.0f))+" min.");
+						SearchListItems.add(track_tmp);						
 					}					
 					SearchListAdapter.notifyDataSetChanged();					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-    		}   
+    		}else if(search_format == "ALBUM"){
+    			try {
+					items = searchjson.getJSONObject("albums").getJSONArray("items");
+					for(int i = 0; i<items.length();i++){
+						item = items.getJSONObject(i);
+						final single_track album_tmp = new single_track();
+						album_tmp.setId(item.getString("id"));
+						album_tmp.setTitle(item.getString("name"));
+						album_tmp.setArtist(item.getString("album_type"));
+						album_tmp.setThumbnailUrl(item.getJSONArray("images").getJSONObject(2).getString("url"));
+						album_tmp.setInfo(item.getString("id"));
+						SearchListItems.add(album_tmp);		
+					}
+					SearchListAdapter.notifyDataSetChanged();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		
     		SearchlistView.setAdapter(SearchListAdapter);
     		return rootView;
     	}
