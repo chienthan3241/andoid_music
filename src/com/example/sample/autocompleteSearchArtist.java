@@ -78,7 +78,7 @@ public class autocompleteSearchArtist extends BaseAdapter implements Filterable{
                 String rq = "";
                 
                 if (constraint != null) {                	
-                		rq = "https://api.spotify.com/v1/search?q=artist:"+constraint.toString().replace(" ", "%20")+"&type=artist&limit=6";              	
+                		rq = "https://api.spotify.com/v1/search?q=artist:"+constraint.toString().replace(" ", "%20")+"&type=artist&limit=10";              	
                 	
                 	Log.v("mmmmmmmm",rq);
                 	HttpClient httpclient = new DefaultHttpClient();

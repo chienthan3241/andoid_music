@@ -82,7 +82,7 @@ public class autocompleteSearchTitle extends BaseAdapter implements Filterable {
                 String rq = "";
                 
                 if (constraint != null) {                	
-                		rq = "https://api.spotify.com/v1/search?q=track:"+constraint.toString().replace(" ", "%20")+"&type=track&limit=6";              	
+                		rq = "https://api.spotify.com/v1/search?q=track:"+constraint.toString().replace(" ", "%20")+"&type=track&limit=10";              	
                 	
                 	System.out.println(rq);
                 	HttpClient httpclient = new DefaultHttpClient();

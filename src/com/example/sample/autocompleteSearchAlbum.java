@@ -81,7 +81,7 @@ public class autocompleteSearchAlbum extends BaseAdapter implements Filterable{
                 String rq = "";
                 
                 if (constraint != null) {                	
-                		rq = "https://api.spotify.com/v1/search?q=album:"+constraint.toString().replace(" ", "%20")+"&type=album&limit=6";              	
+                		rq = "https://api.spotify.com/v1/search?q=album:"+constraint.toString().replace(" ", "%20")+"&type=album&limit=10";              	
                 	
                 	System.out.println(rq);
                 	HttpClient httpclient = new DefaultHttpClient();

@@ -83,7 +83,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         //init Search_list
         SearchListAdapter=new searchTrackList(this, SearchListItems); 
 
-        // Create the adapter that will return a fragment for each of the three primary sections
+        // Create the adapter that will return a fragment for each of the 4 primary sections
         // of the app.
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
 
@@ -460,7 +460,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					e.printStackTrace();
 				}
     		}
-    		
+    		if(SearchListItems.size()==0){
+    			final AlertDialog arlertDialog = new AlertDialog.Builder(rootView.getContext()).create();
+				arlertDialog.setTitle("warning!!");
+		        arlertDialog.setMessage("nothing founded??please go back and try again!!!");
+		        arlertDialog.setButton("OK", new DialogInterface.OnClickListener() {			
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						arlertDialog.cancel();						
+					}
+				});
+		        arlertDialog.show();		        
+    		}
     		SearchlistView.setAdapter(SearchListAdapter);
     		return rootView;
     	}
