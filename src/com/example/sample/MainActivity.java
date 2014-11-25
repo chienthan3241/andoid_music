@@ -11,7 +11,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import android.app.ActionBar;
@@ -30,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -65,7 +68,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * The {@link ViewPager} that will display the three primary sections of the app, one at a
      * time.
      */
-    ViewPager mViewPager;   
+    static ViewPager mViewPager;   
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -213,7 +216,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     		final DelayAutoCompleteTextView albumtxt = (DelayAutoCompleteTextView)rootView.findViewById(R.id.albuminput);
     		final DelayAutoCompleteTextView artisttxt = (DelayAutoCompleteTextView)rootView.findViewById(R.id.artistinput);
     		searchjson = null;
-    		search_format = "";
+    		search_format = "TRACK";
     		rootView.findViewById(R.id.titleinput).requestFocus();
     		titletxt.setThreshold(0);
     		titletxt.setAdapter(new autocompleteSearchTitle(rootView.getContext()));
@@ -266,11 +269,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 						albumtxt.setVisibility(View.GONE);
 						albumtxt.setText("");
 						titletxt.requestFocus();
+						search_format = "TRACK";
 					}else{
 						titletxt.setVisibility(View.GONE);
 						titletxt.setText("");
 						albumtxt.setVisibility(View.VISIBLE);
 						albumtxt.requestFocus();
+						search_format = "ALBUM";
 					}					
 				}
 			});
@@ -433,6 +438,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 						track_tmp.setInfo("Album: "+item.getJSONObject("album").getString("name")+
 										"\t Disc_nr: "+item.getString("disc_number")+
 										"\t track_nr: "+item.getString("track_number") + 
+										"\t popularity: "+item.getString("popularity") + 
 										"\t duration: "+ String.format("%.2f", (float)(Integer.parseInt(item.getString("duration_ms"))/60000.0f))+" min.");
 						SearchListItems.add(track_tmp);						
 					}					
@@ -459,6 +465,43 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+    		}else if(search_format == "ALBUM_EXPAND"){
+    			try {
+					items = searchjson.getJSONObject("tracks").getJSONArray("items");
+					for(int i = 0; i<items.length();i++){
+						item = items.getJSONObject(i);
+						final single_track album_tmp = new single_track();
+						album_tmp.setId(item.getString("id"));
+						album_tmp.setTitle(item.getString("name"));
+						album_tmp.setArtist(item.getJSONArray("artists").getJSONObject(0).getString("name"));
+						album_tmp.setThumbnailUrl(searchjson.getJSONArray("images").getJSONObject(2).getString("url"));
+						album_tmp.setImgFromLocal(true);						
+						album_tmp.setLocalImg(getResources().getIdentifier("rank"+item.getString("track_number"), "drawable", "com.example.sample"));						
+						album_tmp.setInfo("Disc_nr: "+ item.getString("disc_number") +
+								"\t track_nr: "+item.getString("track_number")+
+								"\t duration: "+ String.format("%.2f", (float)(Integer.parseInt(item.getString("duration_ms"))/60000.0f))+" min."
+								);
+						SearchListItems.add(album_tmp);		
+					}
+					//config album header
+					ViewGroup header = (ViewGroup)inflater.inflate(R.layout.album_header, SearchlistView, false);
+					ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+					NetworkImageView headerthumbNail = (NetworkImageView) header.findViewById(R.id.album_thumbnail);
+					TextView headertitle = (TextView) header.findViewById(R.id.album_title);
+					TextView headerinfo = (TextView) header.findViewById(R.id.album_info);
+					TextView headercopyright = (TextView) header.findViewById(R.id.album_copyright);
+					headerthumbNail.setImageUrl(searchjson.getJSONArray("images").getJSONObject(2).getString("url"), imageLoader);
+					headertitle.setText(searchjson.getString("name")+" - " + searchjson.getJSONArray("artists").getJSONObject(0).getString("name"));
+					headerinfo.setText("type: "+searchjson.getString("album_type")+" \t "+"popularity: "+searchjson.getString("popularity")+" \t "+"release: "+searchjson.getString("release_date"));
+					headercopyright.setText(searchjson.getJSONArray("copyrights").getJSONObject(0).getString("text"));
+					SearchlistView.addHeaderView(header,null,false);
+					
+					
+					SearchListAdapter.notifyDataSetChanged();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     		}
     		if(SearchListItems.size()==0){
     			final AlertDialog arlertDialog = new AlertDialog.Builder(rootView.getContext()).create();
@@ -472,7 +515,44 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				});
 		        arlertDialog.show();		        
     		}
-    		SearchlistView.setAdapter(SearchListAdapter);
+    		SearchlistView.setAdapter(SearchListAdapter);  
+    		
+    		SearchlistView.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					//Log.v("fdsfd",SearchListItems.get(position).getId());
+					if(search_format=="ALBUM"){
+						String rq = "https://api.spotify.com/v1/albums/"+SearchListItems.get(position).getId().toString();
+						Log.v("test",rq);
+						JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, rq, null,
+							    new Response.Listener<JSONObject>() 
+							    {
+							        @Override
+							        public void onResponse(JSONObject response) {   
+							            searchjson = response;
+							            search_format = "ALBUM_EXPAND";
+							            Fragment currentFragment  = (Fragment) getFragmentManager().findFragmentByTag("android:switcher:" +R.id.pager + ":" + mViewPager.getCurrentItem());
+							            android.support.v4.app.FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+							            fragTransaction.detach(currentFragment);
+							            fragTransaction.attach(currentFragment);
+							            fragTransaction.commit();							            
+							        }
+							    }, 
+							    new Response.ErrorListener() 
+							    {
+							         @Override
+							         public void onErrorResponse(VolleyError error) {            
+							            Log.v("Error.Response", "error");
+							       }								
+							    }
+							);
+						queue.add(getRequest);
+					}
+				}
+    			
+    		});
     		return rootView;
     	}
     	

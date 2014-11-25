@@ -37,8 +37,14 @@ public class searchTrackList extends BaseAdapter {
 		TextView info = (TextView) view.findViewById(R.id.track_info);
 		//row items
 		single_track track = trackItems.get(position);
-		//thumbnail
-		thumbNail.setImageUrl(track.getThumbnailUrl(), imageLoader);
+		if(track.getImgFromLocal()){
+			//thumbnail
+			//thumbNail.setImageResource(view.getContext().getResources().getIdentifier(track.getLocalImg(), "drawable", view.getContext().getPackageName()));
+			thumbNail.setDefaultImageResId(track.getLocalImg());
+		}else{
+			//thumbnail
+			thumbNail.setImageUrl(track.getThumbnailUrl(), imageLoader);
+		}
 		//title
 		title.setText(track.getTitle()+" - "+ track.getArtist());
 		info.setText(track.getInfo());
